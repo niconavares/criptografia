@@ -24,8 +24,8 @@ La clave final es:
 
 clave_codigo XOR clave_properties
 
-php
-Copiar código
+
+
 
 ### ▶️ Parte 1 — Desarrollo
 
@@ -33,8 +33,8 @@ Sabemos que la clave final generada en memoria es:
 
 91BA13BA21AABB12
 
-yaml
-Copiar código
+
+
 
 **Pregunta:**  
 ¿Qué valor ha puesto el Key Manager para obtener esa clave final?
@@ -47,8 +47,8 @@ En producción el Key Manager entrega este valor:
 
 B98A15BA31AEBB3F
 
-makefile
-Copiar código
+
+
 
 **Pregunta:**  
 ¿Qué clave final resultará en memoria?
