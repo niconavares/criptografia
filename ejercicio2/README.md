@@ -2,29 +2,24 @@ Ejercicio 2 – Descifrado AES/CBC/PKCS7
 
 Este ejercicio forma parte del Proyecto Final del módulo de Criptografía del Bootcamp de Ciberseguridad Full Stack de KeepCoding.
 
-El objetivo es descifrar un texto cifrado usando AES en modo CBC con padding PKCS7, analizar cómo se obtiene el texto en claro y qué sucede si se intenta descifrar usando padding X923.
+El objetivo es descifrar un texto cifrado usando AES en modo CBC con padding PKCS7, analizar el texto en claro y comparar el resultado si se usa padding X923.
 
 🔹 Enunciado del ejercicio
 
-Se nos da:
+Se nos proporciona:
 
-Una clave extraída del keystore con etiqueta “cifrado-sim-aes-256”
+Una clave hex con etiqueta “cifrado-sim-aes-256”
 
-Un IV compuesto por 16 bytes a cero (00 * 16)
+Un IV compuesto por 16 bytes a cero (00…00)
 
-Un texto cifrado en Base64:
+El texto cifrado (Base64):
 
 TQ9SOMKc6aFS9SlxhfK9wT18UXpPCd505Xf5J/5nLI7Of/o0QKIWXg3nu1RRz4QWElezdrLAD5LO4USt3aB/i50nvvJbBiG+le1ZhpR84oI=
 
 
-El algoritmo utilizado para el cifrado ha sido:
+El cifrado usado fue AES / CBC / PKCS7.
 
-AES / CBC / PKCS7
-
-🔹 Código Python utilizado
-
-Este es el código completo del ejercicio, listo para copiar:
-
+🔹 Código utilizado (con botón de copiar)
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import unpad
 import base64
@@ -67,30 +62,23 @@ print("Si cambiamos a x923 daría error al descifrar.")
 print("Porque PKCS7 rellena con el número de bytes (ej: 05 05 05 05 05)")
 print("y x923 rellena con ceros y solo el último es el número (ej: 00 00 00 00 05)")
 
-🔹 Resultado obtenido
+🔹 Resultado del descifrado
 
-En tu ejecución del ejercicio (VSCode):
+En la ejecución:
 
 Texto descifrado: 20553975C31055ED
 Padding añadido: 5
 
+🔹 ¿Qué ocurre si usamos padding X923?
 
-🔍 El padding fueron 5 bytes:
+❌ Produce error.
+Porque el padding PKCS7 usa:
 
 05 05 05 05 05
 
-🔹 ¿Qué ocurre si cambiamos a padding X923?
 
-Si hacemos:
+Y X923 espera:
 
-unpad(datos_descifrados_con_padding, AES.block_size, style='x923')
+00 00 00 00 05
 
-
-➡ Da error.
-Porque los bytes finales no coinciden con el formato de padding X923.
-
-📌 Captura del ejercicio
-
-Añade tu captura con VSCode aquí:
-
-![captura](./captura-ejercicio2.png)
+lll
