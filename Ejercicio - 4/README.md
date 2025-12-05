@@ -6,17 +6,17 @@ Este ejercicio se centra en la seguridad de los **JSON Web Tokens (JWT)**. Anali
 
 ## 🔹 1. Análisis del Token Original
 
-[cite_start]Se nos proporciona un JWT firmado con la clave secreta: `"Con KeepCoding aprendemos"`[cite: 2].
+Se nos proporciona un JWT firmado con la clave secreta: `"Con KeepCoding aprendemos"`.
 
 ### 📌 Captura: Token Legítimo
-![Token Original](Ejercicio - 4.png)
+![Token Original](token-original.png)
 
 ### 🔎 Detalles Técnicos
 Al decodificar el token en `jwt.io`, observamos:
 
 1.  **Algoritmo de Firma:**
-    * [cite_start]En el header aparece `"alg": "HS256"`[cite: 8].
-    * [cite_start]Esto indica **HMAC con SHA-256**[cite: 10].
+    * En el header aparece `"alg": "HS256"`.
+    * Esto indica **HMAC con SHA-256**.
 
 2.  **Payload (Carga útil):**
     ```json
@@ -26,7 +26,7 @@ Al decodificar el token en `jwt.io`, observamos:
       "iat": 1667933533
     }
     ```
-    * [cite_start]El usuario tiene el rol **"isNormal"**, es decir, sin privilegios administrativos[cite: 15, 18].
+    * El usuario tiene el rol **"isNormal"**, es decir, sin privilegios administrativos.
 
 ---
 
@@ -35,7 +35,7 @@ Al decodificar el token en `jwt.io`, observamos:
 Un atacante intercepta el token e intenta modificar el payload para convertirse en administrador.
 
 ### 📌 Captura: Token Manipulado
-![Token Manipulado](Ejercicio - 4-2.png)
+![Token Manipulado](token-atacante.png)
 
 ### 🕵️‍♂️ Análisis del Ataque
 El atacante modifica el cuerpo del JWT cambiando el rol:
@@ -47,11 +47,10 @@ El atacante modifica el cuerpo del JWT cambiando el rol:
 }
 El objetivo es hacerse pasar por administrador ("isAdmin") manipulando el payload.
 
-
 🔹 Conclusión: ¿Por qué falla el ataque?
 Al intentar validar el token modificado, el sistema arroja el error:
 
-❌ Invalid signature / signature verification failed 
+❌ Invalid signature / signature verification failed
 
 Explicación
 La firma de un JWT se genera usando el Header, el Payload y la Clave Secreta.
