@@ -25,15 +25,11 @@ La clave final es:
 clave_codigo XOR clave_properties
 
 
-
-
 ### ▶️ Parte 1 — Desarrollo
 
 Sabemos que la clave final generada en memoria es:
 
 91BA13BA21AABB12
-
-
 
 
 **Pregunta:**  
@@ -46,9 +42,6 @@ Sabemos que la clave final generada en memoria es:
 En producción el Key Manager entrega este valor:
 
 B98A15BA31AEBB3F
-
-
-
 
 **Pregunta:**  
 ¿Qué clave final resultará en memoria?
