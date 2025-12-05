@@ -9,7 +9,7 @@ Este ejercicio se centra en la seguridad de los **JSON Web Tokens (JWT)**. Anali
 Se nos proporciona un JWT firmado con la clave secreta: `"Con KeepCoding aprendemos"`.
 
 ### 📌 Captura: Token Legítimo
-![Token Original](token-original.png)
+![Token Original](Ejercicio%20-%204.png)
 
 ### 🔎 Detalles Técnicos
 Al decodificar el token en `jwt.io`, observamos:
@@ -35,7 +35,7 @@ Al decodificar el token en `jwt.io`, observamos:
 Un atacante intercepta el token e intenta modificar el payload para convertirse en administrador.
 
 ### 📌 Captura: Token Manipulado
-![Token Manipulado](token-atacante.png)
+![Token Manipulado](Ejercicio%20-%204-2.png)
 
 ### 🕵️‍♂️ Análisis del Ataque
 El atacante modifica el cuerpo del JWT cambiando el rol:
