@@ -2,7 +2,7 @@
 
 Este ejercicio forma parte del Proyecto Final del módulo de **Criptografía** del Bootcamp de Ciberseguridad Full Stack de KeepCoding.
 
-El objetivo es descifrar un texto cifrado con **AES en modo CBC** usando padding **PKCS7**, obtener el texto en claro y analizar cuánto padding se añadió. Además, se comprueba qué ocurre si intentamos descifrar usando padding **X923**.
+El objetivo es descifrar un texto cifrado con **AES en modo CBC** usando padding **PKCS7**, obtener el texto en claro y analizar cuánto padding se añadió. Además, se comprueba qué ocurre si intentamos usar padding **X923**.
 
 ---
 
@@ -13,8 +13,6 @@ Se nos proporciona:
 - Una clave hexadecinal del keystore.  
 - Un IV compuesto por 16 bytes a cero (`00`).  
 - Un texto cifrado en Base64:
-
-
 
 TQ9SOMKc6aFS9SlxhfK9wT18UXpPCd505Xf5J/5nLI7Of/o0QKIWXg3nu1RRz4QWElezdrLAD5LO4USt3aB/i50nvvJbBiG+le1ZhpR84oI=
 
@@ -60,17 +58,22 @@ padding_extra = total_bytes - bytes_utiles
 
 print("Padding añadido:", padding_extra)
 
-🔹 Resultado del descifrado
+## 🔹 Resultado del descifrado
+
 Texto descifrado: 20553975C31055ED
 Padding añadido: 5
 
+
+
+
 🔹 ¿Qué ocurre si usamos padding X923?
 
-❌ Da error, porque el padding encontrado no coincide.
+❌ Da error porque el padding encontrado no coincide.
+
 PKCS7 usa: 05 05 05 05 05
+
 X923 usa: 00 00 00 00 05
 
-📌 Captura del ejercicio
+## 📌 Captura del ejercicio
 
-
----
+![Captura del ejercicio](./captura-ejercicio2.png)
