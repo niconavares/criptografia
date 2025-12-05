@@ -71,6 +71,9 @@ PKCS7 usa: 05 05 05 05 05
 
 X923 usa: 00 00 00 00 05
 
+---
+
+
 ## 📌 Captura del ejercicio
 ![Captura del ejercicio](https://github.com/niconavares/criptografia/blob/main/ejercicio2/captura-ejercicio2.png)
 
