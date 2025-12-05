@@ -5,7 +5,7 @@ Este ejercicio tiene como objetivo identificar los algoritmos de hash utilizados
 ---
 
 ### 📌 Captura de ejecución
-![Captura del ejercicio 5](captura-ejercicio5.png)
+![Captura del ejercicio 5](Ejercicio%20-%205.png)
 
 ---
 
