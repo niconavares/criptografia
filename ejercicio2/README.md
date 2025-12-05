@@ -1,25 +1,33 @@
-Ejercicio 2 – Descifrado AES/CBC/PKCS7
+# Ejercicio 2 – Descifrado AES/CBC/PKCS7
 
-Este ejercicio forma parte del Proyecto Final del módulo de Criptografía del Bootcamp de Ciberseguridad Full Stack de KeepCoding.
+Este ejercicio forma parte del Proyecto Final del módulo de **Criptografía** del Bootcamp de Ciberseguridad Full Stack de KeepCoding.
 
-El objetivo es descifrar un texto cifrado usando AES en modo CBC con padding PKCS7, analizar el texto en claro y comparar el resultado si se usa padding X923.
+El objetivo es descifrar un texto cifrado usando **AES en modo CBC** con padding **PKCS7**, analizar el texto en claro y comprobar qué ocurre si se usa padding **X923**.
 
-🔹 Enunciado del ejercicio
+---
+
+## 🔹 Enunciado del ejercicio
 
 Se nos proporciona:
 
-Una clave hex con etiqueta “cifrado-sim-aes-256”
-
-Un IV compuesto por 16 bytes a cero (00…00)
-
-El texto cifrado (Base64):
+- Una clave hex del keystore.
+- Un IV de 16 bytes a cero (`00` * 16).
+- El texto cifrado en Base64:
 
 TQ9SOMKc6aFS9SlxhfK9wT18UXpPCd505Xf5J/5nLI7Of/o0QKIWXg3nu1RRz4QWElezdrLAD5LO4USt3aB/i50nvvJbBiG+le1ZhpR84oI=
 
+python
+Copiar código
 
-El cifrado usado fue AES / CBC / PKCS7.
+El algoritmo usado en el cifrado fue:
 
-🔹 Código utilizado (con botón de copiar)
+**AES / CBC / PKCS7**
+
+---
+
+## 🔹 Código utilizado
+
+```python
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import unpad
 import base64
@@ -61,24 +69,23 @@ print("\nSobre el padding x923:")
 print("Si cambiamos a x923 daría error al descifrar.")
 print("Porque PKCS7 rellena con el número de bytes (ej: 05 05 05 05 05)")
 print("y x923 rellena con ceros y solo el último es el número (ej: 00 00 00 00 05)")
-
 🔹 Resultado del descifrado
-
-En la ejecución:
-
+less
+Copiar código
 Texto descifrado: 20553975C31055ED
 Padding añadido: 5
+🔹 ¿Qué ocurre si cambiamos a padding X923?
+❌ Da error.
 
-🔹 ¿Qué ocurre si usamos padding X923?
+Porque:
 
-❌ Produce error.
-Porque el padding PKCS7 usa:
+PKCS7: 05 05 05 05 05
 
-05 05 05 05 05
+X923: 00 00 00 00 05
 
+Ambos paddings no coinciden, por lo que la función unpad() lanza una excepción al validar los bytes finales.
 
-Y X923 espera:
+📌 Captura del ejercicio
 
-00 00 00 00 05
-
-lll
+yaml
+Copiar código
