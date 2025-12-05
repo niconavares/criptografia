@@ -65,9 +65,14 @@ print("Padding añadido:", padding_extra)
 
 🔹 Resultado del descifrado
 
-Texto descifrado:20553975C31055ED
+Texto descifrado:
 
-Padding añadido: 5
+20553975C31055ED
+
+
+Padding añadido:
+
+5
 
 🔹 ¿Qué ocurre si usamos padding X923?
 
