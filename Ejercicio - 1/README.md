@@ -1,7 +1,7 @@
 # Ejercicio 1 – Disociación de claves mediante XOR
 
 ### 📌 Captura del ejercicio
-![Captura del ejercicio](Ejercicio%20-%201.png)
+![Captura del ejercicio](captura-ejercicio1.png)
 
 Este ejercicio forma parte del Proyecto Final del módulo de **Criptografía** del Bootcamp de Ciberseguridad Full Stack de KeepCoding.
 
