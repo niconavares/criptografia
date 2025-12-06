@@ -1,77 +1,58 @@
-# Ejercicio 2 – Descifrado AES/CBC/PKCS7
+# 🔐 Práctica Final - Criptografía
 
-Este ejercicio consiste en descifrar un texto cifrado con **AES en modo CBC** usando padding **PKCS7**. [cite_start]El objetivo es obtener el texto en claro y analizar cuánto padding se añadió[cite: 1, 2, 7].
+![Status](https://img.shields.io/badge/Estado-En%20Progreso-orange?style=for-the-badge)
+![Bootcamp](https://img.shields.io/badge/KeepCoding-Ciberseguridad-blue?style=for-the-badge)
+![Python](https://img.shields.io/badge/Python-3.10%2B-yellow?style=for-the-badge&logo=python&logoColor=white)
 
----
+Hola 👋. Soy **Nicolas Navares** y este repositorio recoge mi trabajo final para el módulo de Criptografía del Bootcamp Full Stack de Ciberseguridad en **KeepCoding**.
 
-### 📌 Captura del ejercicio
-![Captura del ejercicio 2](captura-ejercicio2.png)
-
----
-
-## 🔹 Enunciado
-
-Se nos proporciona:
-- [cite_start]Una clave hexadecimal del keystore etiqueta “cifrado-sim-aes-256”[cite: 2].
-- [cite_start]Un IV compuesto por 16 bytes a cero (`00`)[cite: 2, 3].
-- [cite_start]Un texto cifrado en Base64: `TQ9SOMKc6aFS9SlxhfK9wT18UXpPCd505Xf5J/5nLI7Of/o0QKIWXg3nu1RRz4QWElezdrLAD5LO4USt3aB/i50nvvJbBiG+le1ZhpR84oI=`[cite: 5, 6].
-
-También se plantean las preguntas:
-1. [cite_start]Si lo desciframos, ¿qué obtenemos? [cite: 7, 8]
-2. [cite_start]¿Qué ocurre si decidimos cambiar el padding a x923? [cite: 9]
-3. [cite_start]¿Cuánto padding se ha añadido? [cite: 10]
+Este proyecto está siendo un reto muy intenso. Aquí no solo subo las soluciones, sino que intento documentar el "porqué" de las cosas, peleándome con algoritmos de cifrado, firmas digitales, curvas elípticas y entendiendo cómo proteger la información (y cómo romperla si no se hace bien).
 
 ---
 
-## 🔹 Código Solución
+## 📂 Índice de Ejercicios
 
-```python
-from Crypto.Cipher import AES
-from Crypto.Util.Padding import unpad
-import base64
+El proyecto consta de 15 retos que cubren todo lo visto en el módulo. Aquí está mi progreso actual:
 
-# Clave que saque de la KeyStorePractica
-clave_hex = "A2CFF885901A5449E9C448BA5B948A8C4EE377152B3F1ACFA0148FB3A426DB72"
-# El IV son todo ceros
-iv_hex = "00000000000000000000000000000000"
-# El texto cifrado en base64
-texto_cifrado_b64 = "TQ9SOMKc6aFS9SlxhfK9wT18UXpPCd505Xf5J/5nLI7Of/o0QKIWXg3nu1RRz4QWElezdrLAD5LO4USt3aB/i50nvvJbBiG+le1ZhpR84oI="
+### ✅ Ejercicios Realizados
 
-# Paso todo a bytes para poder usarlo
-clave = bytes.fromhex(clave_hex)
-iv = bytes.fromhex(iv_hex)
-texto_cifrado = base64.b64decode(texto_cifrado_b64)
+| Carpeta | Temática | Lo que he aprendido |
+| :--- | :--- | :--- |
+| **[📂 Ejercicio 1](./Ejercicio%20-%201)** | **Disociación de Claves** | [cite_start]Cómo proteger claves usando XOR entre código fijo y variables dinámicas [cite: 111-114]. |
+| **[📂 Ejercicio 2](./ejercicio2)** | **Descifrado AES-CBC** | [cite_start]Descifrar mensajes, manejo de IVs y entender por qué el padding PKCS7 es vital [cite: 119-125]. |
+| **[📂 Ejercicio 3](./ejercicio3)** | **ChaCha20 + Poly1305** | [cite_start]Cifrado de flujo moderno y cómo garantizar la integridad del mensaje (AEAD) [cite: 127-130]. |
+| **[📂 Ejercicio 4](./ejercicio4)** | **Seguridad en JWT** | [cite_start]Análisis de tokens, firmas HMAC y cómo evitar escaladas de privilegios [cite: 139-147]. |
+| **[📂 Ejercicio 5](./ejercicio5)** | **Hashing & Avalancha** | Diferencias entre SHA-2 y SHA-3. [cite_start]Demostración práctica del "Efecto Avalancha" [cite: 149-163]. |
+| **[📂 Ejercicio 6](./ejercicio6)** | **Cálculo HMAC** | [cite_start]Verificar la autenticidad de una frase usando una clave secreta de un Keystore[cite: 164]. |
 
-print("--- Empezando a descifrar ---")
+### ⏳ Próximos Ejercicios (En proceso)
 
-# Configuro el descifrador AES en modo CBC
-cipher = AES.new(clave, AES.MODE_CBC, iv)
+| Carpeta | Temática | Descripción del reto |
+| :--- | :--- | :--- |
+| **[📂 ejercicio7](./ejercicio7)** | **Almacenamiento Passwords** | [cite_start]Análisis de SHA-1 vs SHA-256 y estrategias de salting para bases de datos [cite: 166-173]. |
+| **[📂 ejercicio8](./ejercicio8)** | **Seguridad API REST** | [cite_start]Cómo asegurar campos confidenciales (JSON) sin usar TLS [cite: 174-205]. |
+| **[📂 ejercicio9](./ejercicio9)** | **KCV (Key Check Value)** | [cite_start]Calcular valores de control para verificar claves AES y SHA [cite: 212-217]. |
+| **[📂 ejercicio10](./ejercicio10)** | **PGP & GPG** | [cite_start]Firmado y cifrado de correos/archivos en un escenario corporativo (RRHH) [cite: 218-230]. |
+| **[📂 ejercicio11](./ejercicio11)** | **RSA-OAEP** | [cite_start]Cifrado asimétrico para proteger claves de sesión en videollamadas [cite: 239-252]. |
+| **[📂 ejercicio12](./ejercicio12)** | **AES-GCM & Nonces** | [cite_start]Análisis de vulnerabilidades por reutilización de nonces en GCM [cite: 253-266]. |
+| **[📂 ejercicio13](./ejercicio13)** | **Firmas Digitales** | [cite_start]Comparativa entre firmas clásicas (RSA PKCS#1) y Curvas Elípticas (Ed25519) [cite: 267-270]. |
+| **[📂 ejercicio14](./ejercicio14)** | **Derivación de Claves** | [cite_start]Uso de HKDF-SHA512 para generar claves maestras únicas por dispositivo [cite: 271-279]. |
+| **[📂 ejercicio15](./ejercicio15)** | **Bloques TR31** | [cite_start]Análisis de seguridad en bloques de claves bancarias (Key Blocks) [cite: 280-295]. |
 
-# Descifro los datos
-datos_descifrados_con_padding = cipher.decrypt(texto_cifrado)
+---
 
-# Le quito el padding (PKCS7)
-datos_limpios = unpad(datos_descifrados_con_padding, AES.block_size, style='pkcs7')
+## 🛠️ Librerías y Herramientas
 
-# Muestro el resultado
-print("Texto descifrado:", datos_limpios.decode('utf-8'))
+Para resolver estos retos he tenido que investigar y trabajar con varias librerías específicas de Python. Estas son las dependencias principales del proyecto:
 
-# Calculo cuanto padding habia
-total_bytes = len(datos_descifrados_con_padding)
-bytes_utiles = len(datos_limpios)
-padding_extra = total_bytes - bytes_utiles
-print("Padding añadido:", padding_extra, "bytes")
+* `pycryptodome` (La base para casi todo: AES, ChaCha20, RSA...)
+* `cryptography`
+* `pyjks` (Para leer los ficheros `.jks` y `.jceks` del Keystore)
+* `psec`
+* `argon2-cffi` (Para hashing de contraseñas seguro)
+* `ed25519` (Para firmas con curvas elípticas)
 
-# Respuesta a la pregunta del x923
-print("\nSobre el padding x923:")
-print("Si cambiamos a x923 daría error al descifrar.")
-print("Porque PKCS7 rellena con el número de bytes (ej: 05 05 05 05 05)")
-print("Y x923 rellena con ceros y solo el último es el número (ej: 00 00 00 00 05)")
-🔹 Resultado del descifrado
-Según la ejecución del script:
+Para instalarlas todas de golpe:
 
-Texto descifrado: Esto es un cifrado en bloque típico. Recuerda, vas por el buen camino. Ánimo.
-
-Padding añadido: 1 bytes
-
-Sobre el padding X923: Si cambiamos a X923 daría error al descifrar porque PKCS7 rellena con el valor del byte repetido (ej: 05 05 05 05 05), mientras que X923 rellena con ceros y solo el último byte indica la longitud (ej: 00 00 00 00 05).
+```bash
+pip install pycryptodome cryptography pyjks psec argon2-cffi ed25519
