@@ -32,8 +32,7 @@ Sabemos que la clave final generada en memoria es:
 91BA13BA21AABB12
 
 
-**Pregunta:**  
-¿Qué valor ha puesto el Key Manager para obtener esa clave final?
+**Pregunta:** ¿Qué valor ha puesto el Key Manager para obtener esa clave final?
 
 ---
 
@@ -43,21 +42,20 @@ En producción el Key Manager entrega este valor:
 
 B98A15BA31AEBB3F
 
-**Pregunta:**  
-¿Qué clave final resultará en memoria?
+**Pregunta:** ¿Qué clave final resultará en memoria?
 
 ---
 
 ## 📌 Código en Python
 
-Archivo: `Ejercicio-1.py`
+Archivo: `Ejercicio - 1.py`
 
 ```python
-#XOR de datos binarios
+# XOR de datos binarios
 def xor_data(binary_data_1, binary_data_2):
     return bytes([b1 ^ b2 for b1, b2 in zip(binary_data_1, binary_data_2)])
 
-#Desarrollo
+# Desarrollo
 # clave_codigo = B1EF2ACFE2BAEEFF
 # clave_final_memoria = 91BA13BA21AABB12
 # Buscamos: Key Manager 
@@ -66,7 +64,7 @@ m = bytes.fromhex("B1EF2ACFE2BAEEFF")
 k = bytes.fromhex("91BA13BA21AABB12")
 print("Desarrollo (Key Manager):", xor_data(m,k).hex().upper())
 
-#Produccion
+# Produccion
 # clave_codigo = B1EF2ACFE2BAEEFF
 # Key Manager (Properties) =  B98A15BA31AEBB3F
 # Buscamos: Clave Final (Memoria)
