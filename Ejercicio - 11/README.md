@@ -2,22 +2,22 @@
 
 En este ejercicio nos ponemos en la piel de una empresa de videollamadas. Nos han pasado una **clave simétrica** que estaba cifrada, y nuestro trabajo es recuperarla usando criptografía asimétrica (RSA).
 
-Lo curioso de este ejercicio es ver cómo funciona el cifrado RSA con el estándar **OAEP** y qué pasa cuando ciframos dos veces lo mismo.
+[cite_start]Lo curioso de este ejercicio es ver cómo funciona el cifrado RSA con el estándar **OAEP** y qué pasa cuando ciframos dos veces lo mismo [cite: 438-440].
 
 ---
 
 ### 📌 Así me ha quedado
 Aquí se ve el programa descifrando la clave y volviendo a cifrarla:
 
-![Resultado del ejercicio 11](Ejercicio%20-%2011.jpg)
+![Resultado del ejercicio 11](Ejercicio%20-%2011.png)
 
 ---
 
 ## 🔹 ¿Qué he tenido que hacer?
 
 El profesor nos dio:
-1.  Un texto cifrado en hexadecimal (un churro enorme de números y letras).
-2.  Una **Clave Privada** y una **Clave Pública**.
+1.  [cite_start]Un texto cifrado en hexadecimal (un churro enorme de números y letras) [cite: 441-448].
+2.  [cite_start]Una **Clave Privada** y una **Clave Pública**[cite: 449].
 
 **Mis pasos han sido:**
 
@@ -28,7 +28,7 @@ El profesor nos dio:
 
 ## 🧐 La pregunta del millón: ¿Por qué son distintos?
 
-Me di cuenta de algo raro: el texto cifrado que me dieron al principio **NO coincide** con el texto que yo he cifrado después, aunque la clave original es la misma.
+[cite_start]Me di cuenta de algo raro: el texto cifrado que me dieron al principio **NO coincide** con el texto que yo he cifrado después, aunque la clave original es la misma[cite: 450].
 
 **Mi conclusión:**
 Al principio pensé que había hecho algo mal, pero he descubierto que es normal.
