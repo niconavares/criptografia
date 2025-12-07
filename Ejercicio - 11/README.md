@@ -2,7 +2,7 @@
 
 En este ejercicio nos ponemos en la piel de una empresa de videollamadas. Nos han pasado una **clave simétrica** que estaba cifrada, y nuestro trabajo es recuperarla usando criptografía asimétrica (RSA).
 
-[cite_start]Lo curioso de este ejercicio es ver cómo funciona el cifrado RSA con el estándar **OAEP** y qué pasa cuando ciframos dos veces lo mismo [cite: 37-40].
+Lo curioso de este ejercicio es ver cómo funciona el cifrado RSA con el estándar **OAEP** y qué pasa cuando ciframos dos veces lo mismo.
 
 ---
 
@@ -16,8 +16,8 @@ Aquí se ve el programa descifrando la clave y volviendo a cifrarla:
 ## 🔹 ¿Qué he tenido que hacer?
 
 El profesor nos dio:
-1.  [cite_start]Un texto cifrado en hexadecimal (un churro enorme de números y letras) [cite: 42-49].
-2.  [cite_start]Una **Clave Privada** y una **Clave Pública** [cite: 50-51].
+1.  Un texto cifrado en hexadecimal (un churro enorme de números y letras).
+2.  Una **Clave Privada** y una **Clave Pública**.
 
 **Mis pasos han sido:**
 
@@ -28,12 +28,12 @@ El profesor nos dio:
 
 ## 🧐 La pregunta del millón: ¿Por qué son distintos?
 
-[cite_start]Me di cuenta de algo raro: el texto cifrado que me dieron al principio **NO coincide** con el texto que yo he cifrado después, aunque la clave original es la misma [cite: 52-53].
+Me di cuenta de algo raro: el texto cifrado que me dieron al principio **NO coincide** con el texto que yo he cifrado después, aunque la clave original es la misma.
 
 **Mi conclusión:**
 Al principio pensé que había hecho algo mal, pero he descubierto que es normal.
 El algoritmo **RSA con OAEP** mete "ruido" aleatorio (padding) cada vez que cifra.
-* Esto se hace por seguridad, para que si envías el mismo mensaje dos veces, los hackers no sepan que es el mismo porque el cifrado se ve diferente.
+* Esto se hace por seguridad, para que si envías el mismo mensaje dos veces, los hackers no sepan que es el mismo porque el cifrado se ve diferente cada vez.
 
 ---
 
