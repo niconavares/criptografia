@@ -31,7 +31,7 @@ Por lo que he leído, las "curvas elípticas" son igual de seguras (o más) pero
 
 ## 💻 El código Python
 
-He tenido que pelearme con un par de librerías nuevas, pero al final ha salido. Aquí dejo el código completo para que el profe lo pueda probar.
+He tenido que pelearme con un par de librerías nuevas, pero al final ha salido. 
 
 ```python
 from Crypto.PublicKey import RSA
