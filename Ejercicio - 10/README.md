@@ -28,7 +28,7 @@ Aquí tuve que generar la respuesta y firmarla digitalmente.
 * Me costó un poco porque la terminal me dio varios errores de "signing failed" u "operación cancelada" (creo que me lie seleccionando el usuario local "RRHH").
 * Se pueden ver mis intentos fallidos en la siguiente imagen, hasta que finalmente di con la tecla.
 
-![Intentos de firma](3.jpg)
+![Intentos de firma](3.png)
 
 * Finalmente, logré generar el archivo de firma correctamente.
 
@@ -39,11 +39,11 @@ Por último, cifré el mensaje de confirmación para los dos destinatarios (Pedr
 * Al ejecutar el comando, GPG me lanzó unas advertencias de seguridad ("No hay seguridad de que esta clave pertenezca...").
 * Como se ve en la captura, tuve que escribir "s" (sí) dos veces para confirmar que confiaba en las claves y proceder con el cifrado.
 
-![Confirmación de seguridad y cifrado](4.jpg)
+![Confirmación de seguridad y cifrado](4.png)
 
 * Al final, hice un `ls` para comprobar que todos los archivos requeridos (`confirmacion.gpg`, `respuesta_rrhh.txt.sig`) se habían creado bien en la carpeta.
 
-![Resultado final con ls](5.jpg)
+![Resultado final con ls](5.png)
 
 ---
 
