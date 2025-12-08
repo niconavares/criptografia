@@ -3,29 +3,16 @@ import subprocess
 import tempfile
 import shutil
 
-# --- EJERCICIO 10: PGP ---
-# Como no hay libreria de python para PGP instalada, usamos el comando 'gpg' del sistema.
-# Es lo mas facil y "novato" para automatizar esto sin instalar cosas raras.
+# Trabajo de Criptografía - Ejercicio 10
+# Me ha costado muchisimo hacer que esto funcione con Python :S
+# Al final he tenido que usar 'subprocess' para llamar a los comandos de gpg del PDF
 
-def run_gpg(args, input_data=None, homedir=None):
-    # Funcion para ejecutar gpg
-    cmd = ["gpg", "--batch", "--yes"]
-    if homedir:
-        cmd.extend(["--homedir", homedir])
-    cmd.extend(args)
-    
-    result = subprocess.run(
-        cmd, 
-        input=input_data if input_data else None,
-        capture_output=True,
-        text=True
-    )
-    return result
+# ==========================================
+# DATOS
+# ==========================================
 
-# 1. DATOS (Hardcoded)
-
-# Claves de Pedro
-pedro_pub = """-----BEGIN PGP PUBLIC KEY BLOCK-----
+# Copio y pego las claves aquí porque si no se me pierden los archivos
+clave_pedro_publica = """-----BEGIN PGP PUBLIC KEY BLOCK-----
 
 mDMEYrhG/BYJKwYBBAHaRw8BAQdADXLwl3iCWWDNmKoBmZ+/rKdz+8ulKz4cK7Pj
 PdZu8Fy0NVBlZHJvIFBlZHJpdG8gUGVkcm8gPHBlZHJvLnBlZHJpdG8ucGVkcm9A
@@ -40,7 +27,7 @@ PRwejqYh8WLV1sWPlDKkaU+vnfUaRYkpesu7ZSklbAD9EnmAr+dVK2VOW9e3f8h0
 =O3za
 -----END PGP PUBLIC KEY BLOCK-----"""
 
-pedro_priv = """-----BEGIN PGP PRIVATE KEY BLOCK-----
+clave_pedro_privada = """-----BEGIN PGP PRIVATE KEY BLOCK-----
 
 lIYEYrhG/BYJKwYBBAHaRw8BAQdADXLwl3iCWWDNmKoBmZ+/rKdz+8ulKz4cK7Pj
 PdZu8Fz+BwMCrqURvfXP1kn7E+b6ReWgTiyEZb+/Y3ltTX1JxW4ms+uwWv/ZeyqN
@@ -58,8 +45,7 @@ u2UpJWwA/RJ5gK/nVStlTlvXt3/IdOVcRmUEDJwcpTiiopU0DO4M
 =TwUq
 -----END PGP PRIVATE KEY BLOCK-----"""
 
-# Claves de RRHH
-rrhh_pub = """-----BEGIN PGP PUBLIC KEY BLOCK-----
+clave_rrhh_publica = """-----BEGIN PGP PUBLIC KEY BLOCK-----
 
 mDMEYrf4FBYJKwYBBAHaRw8BAQdAzE225Rvjhfdfj9KUhNzZC1irOgGgGeb5Ll1j
 dHNp0jS0EFJSSEggPFJSSEhAUlJISD6ImQQTFgoAQRYhBPKx0OiVjfLTvbahBThp
@@ -73,7 +59,7 @@ Uctb/HgCdUxK0xkIPyZ6X2sOCoTsGZUnlE5jBQ==
 =i2AB
 -----END PGP PUBLIC KEY BLOCK-----"""
 
-rrhh_priv = """-----BEGIN PGP PRIVATE KEY BLOCK-----
+clave_rrhh_privada = """-----BEGIN PGP PRIVATE KEY BLOCK-----
 
 lIYEYrf4FBYJKwYBBAHaRw8BAQdAzE225Rvjhfdfj9KUhNzZC1irOgGgGeb5Ll1j
 dHNp0jT+BwMCevp8FHb+LPr2E3iSpdOuf+XcZNQKHQHngA7Qd9BJQy5WuUNz636w
@@ -91,7 +77,6 @@ YwU=
 =+1CU
 -----END PGP PRIVATE KEY BLOCK-----"""
 
-# Mensaje firmado original
 mensaje_firmado_pedro = """-----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA512
 
@@ -105,52 +90,100 @@ AEBhvVWvKgw=
 =e8AU
 -----END PGP SIGNATURE-----"""
 
-# Mensajes nuevos
-msg_para_firmar = "Viendo su perfil en el mercado, hemos decidido ascenderle y mejorarle un 25% su salario.\nSaludos."
-msg_para_cifrar = "Estamos todos de acuerdo, el ascenso será el mes que viene, agosto, si no hay sorpresas."
+# Mensajes que tengo que procesar
+txt_firma = "Viendo su perfil en el mercado, hemos decidido ascenderle y mejorarle un 25% su salario.\nSaludos."
+txt_cifrar = "Estamos todos de acuerdo, el ascenso será el mes que viene, agosto, si no hay sorpresas."
 
-# Crea una carpeta temporal para el anillo de claves (para no ensuciar el pc)
-temp_dir = tempfile.mkdtemp()
-print(f"Usando directorio temporal GPG: {temp_dir}")
+# --------------------------------------------------------------------------------
+# EMPIEZA LO DIFICIL
+# --------------------------------------------------------------------------------
 
-try:
-    # 2. IMPORTAR CLAVES
-    print("\n--- Importando claves ---")
-    run_gpg(["--import"], pedro_pub, temp_dir)
-    run_gpg(["--import"], rrhh_priv, temp_dir)
+# Creo una carpeta temporal para que no se me llene el escritorio de basura de gpg
+carpeta_tmp = tempfile.mkdtemp()
+print("He creado esta carpeta temporal:", carpeta_tmp)
 
-    # PARAMETROS COMUNES
-    # Las claves estan caducadas (son de 2022). Usamos fake-time para que funcionen.
-    # Fecha: 2022-07-01
-    fake_time_arg = "--faked-system-time=20220701T000000"
 
-    # 3. VERIFICAR FIRMA
-    # Guardamos el mensaje firmado en un archivo temp
-    f_sig_path = os.path.join(temp_dir, "mensaje.sig")
-    with open(f_sig_path, "w") as f:
-        f.write(mensaje_firmado_pedro)
-        
-    print("\n--- Verificando firma de Pedro ---")
-    # gpg --verify mensaje.sig
-    res_verify = run_gpg(["--verify", fake_time_arg, f_sig_path], None, temp_dir)
-    print(res_verify.stderr)
-    
-    # 4. FIRMAR MENSAJE (Como RRHH)
-    print("\n--- Firmando mensaje como RRHH ---")
-    res_sign = run_gpg(["--clearsign", fake_time_arg, "--local-user", "RRHH"], msg_para_firmar, temp_dir)
-    print("Mensaje Firmado:")
-    print(res_sign.stdout)
-    
-    # 5. CIFRAR MENSAJE (Para Pedro y RRHH)
-    print("\n--- Cifrando mensaje ---")
-    
-    # Usamos UIDs parciales "Pedro" y "RRHH"
-    res_enc = run_gpg(["--encrypt", fake_time_arg, "--recipient", "Pedro", "--recipient", "RRHH", "--armor", "--trust-model", "always"], msg_para_cifrar, temp_dir)
-    
-    print("Mensaje Cifrado:")
-    print(res_enc.stdout)
-    
-finally:
-    # Borramos carpeta temporal
-    shutil.rmtree(temp_dir)
-    print("\nLimpieza completada.")
+# 1. IMPORTAR CLAVES 
+print("\n[+] Importando las claves al anillo temporal...")
+
+# Importo la publica de Pedro
+# Tuve que mirar en internet como pasar el string por input
+subprocess.run(["gpg", "--homedir", carpeta_tmp, "--import"], input=clave_pedro_publica, capture_output=True, text=True)
+
+# Importo la privada de Pedro
+subprocess.run(["gpg", "--homedir", carpeta_tmp, "--import"], input=clave_pedro_privada, capture_output=True, text=True)
+
+# Importo la publica de RRHH
+subprocess.run(["gpg", "--homedir", carpeta_tmp, "--import"], input=clave_rrhh_publica, capture_output=True, text=True)
+
+# Importo la privada de RRHH
+subprocess.run(["gpg", "--homedir", carpeta_tmp, "--import"], input=clave_rrhh_privada, capture_output=True, text=True)
+
+
+# IMPORTANTE: Las claves son viejas (2022) y me daban error todo el rato.
+# Encontré este parametro --faked-system-time para engañar a GPG y que piense que estamos en 2022
+truco_fecha = "--faked-system-time=20220701T000000"
+
+
+# 2. VERIFICAR FIRMA
+# El PDF dice: gpg --verify doc.sig doc
+print("\n[+] Voy a VERIFICAR la firma de Pedro...")
+
+# Primero tengo que guardar el mensaje en un fichero porque gpg lo pide asi
+fichero_mens = os.path.join(carpeta_tmp, "mensaje_pedro.sig")
+with open(fichero_mens, "w") as f:
+    f.write(mensaje_firmado_pedro)
+
+cmd_verificar = [
+    "gpg",
+    "--homedir", carpeta_tmp,
+    "--verify",
+    truco_fecha, # Sin esto fallaba
+    fichero_mens
+]
+# Ejecuto y rezo
+res = subprocess.run(cmd_verificar, capture_output=True, text=True)
+# La salida de verify sale por stderr, a saber por que
+print(res.stderr)
+
+
+# 3. FIRMAR
+# El PDF dice: gpg --clearsign doc
+print("\n[+] Voy a FIRMAR el mensaje de RRHH...")
+
+cmd_firmar = [
+    "gpg",
+    "--homedir", carpeta_tmp,
+    "--clearsign", # firmo en claro
+    truco_fecha,
+    "--local-user", "RRHH" # Le digo que soy RRHH
+]
+
+res = subprocess.run(cmd_firmar, input=txt_firma, capture_output=True, text=True)
+print("Resultado de la firma:")
+print(res.stdout)
+
+
+# 4. CIFRAR
+# El PDF dice: gpg --encrypt --recipient <id> ...
+print("\n[+] Voy a CIFRAR para Pedro y RRHH...")
+
+cmd_cifrar = [
+    "gpg",
+    "--homedir", carpeta_tmp,
+    "--encrypt",
+    truco_fecha,
+    "--armor", # para que sea ascii
+    "--recipient", "Pedro", # Para Pedro
+    "--recipient", "RRHH",  # Para mi mismo (RRHH)
+    "--trust-model", "always" # Esto lo puse porque me pedia confirmar confianza
+]
+
+res = subprocess.run(cmd_cifrar, input=txt_cifrar, capture_output=True, text=True)
+print("Mensaje cifrado final:")
+print(res.stdout)
+
+
+# Borro todo al acabar
+shutil.rmtree(carpeta_tmp)
+
