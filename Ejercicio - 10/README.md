@@ -1,196 +1,56 @@
-# Ejercicio 10 – PGP (Firmas y Cifrado de Mensajes)
+Hola, aquí entrego los archivos resultantes del Ejercicio 10. Es la primera vez que hago una práctica completa de criptografía en la terminal, así que he ido paso a paso y sacando capturas de todo para documentarlo (incluso de cuando me equivocaba).
 
-Este ejercicio va sobre enviar mensajes seguros como si estuviéramos en una empresa. El escenario es una conversación entre **Pedro** (el jefe) y **RRHH** (nosotros) sobre un ascenso.
+Aquí explico lo que he hecho y qué captura corresponde a cada paso:
 
-He tenido que hacer tres cosas: verificar que un mensaje de Pedro era real, contestarle con una firma oficial y enviarle un mensaje secreto cifrado.
+1. Preparación de las claves
+Lo primero fue importar las claves públicas y privadas de Pedro y RRHH.
 
----
+He ejecutado los 4 comandos de importación.
 
-### 📌 Así me ha quedado
-He hecho un script en Python que automatiza los comandos de GPG. Aquí se ve cómo verifica la firma, crea la mía y cifra el mensaje final:
+Todo ha salido bien, ponía "sin cambios" o "leídas".
 
-![Resultado del ejercicio 10](Ejercicio%20-%2010.png)
+📸 Evidencia: Se puede ver en la imagen 1.png.
 
----
+2. Verificación de la firma (Paso 1)
+Tenía que comprobar que el mensaje de Pedro era auténtico.
 
-## 🧐 Paso a paso (Lo que he hecho)
+Aquí tuve un pequeño fallo al principio: escribí el nombre del archivo acabado en .txt.sig y me dio error porque no existía.
 
-### 1. Verificar la firma de Pedro
-[cite_start]Pedro nos mandó un fichero `.sig` diciendo que había que subirle el sueldo a Raúl [cite: 386-392].
-* **¿Es auténtico?** Sí. Al pasarle la clave pública de Pedro, el programa me ha dicho:
-  > `Firma correcta de "Pedro Pedrito Pedro"`
-* Así que me fío: el mensaje viene de él y nadie lo ha modificado.
+Luego me di cuenta, lo corregí quitando el .txt y ya me salió el mensaje de "Firma correcta" (Good signature).
 
-### 2. Firmar mi respuesta (Como RRHH)
-[cite_start]Yo (simulando ser RRHH) he escrito: *"Viendo su perfil... hemos decidido ascenderle y mejorarle un 25% su salario"* [cite: 400-402].
-* Para que Pedro sepa que es oficial, he firmado este texto con mi **Clave Privada** de RRHH.
-* El resultado es el bloque que empieza por `-----BEGIN PGP SIGNED MESSAGE-----`.
+📸 Evidencia: En la imagen 2.png se ven mis dos intentos y el resultado correcto al final.
 
-### 3. Cifrar el mensaje final
-[cite_start]Por último, tenía que enviar un mensaje confidencial: *"Estamos todos de acuerdo, el ascenso será el mes que viene..."* [cite: 405-407].
-* **El reto:** Cifrarlo para que lo lea Pedro, pero también para poder leerlo yo (RRHH) después.
-* **Solución:** He cifrado el mensaje usando **las dos claves públicas** (la de Pedro y la de RRHH) a la vez. Así ambos podemos descifrarlo con nuestras claves privadas (la contraseña para las claves, si la pide, es `123456`).
+3. Firmar la respuesta de RRHH (Paso 2)
+Este paso me costó un poco más. Tenía que firmar mi respuesta simulando ser RRHH.
 
----
+Como se ve en las capturas, al principio me salía un error de "signing failed" o "operación cancelada". Me puse un poco nervioso porque no sabía qué clave estaba cogiendo.
 
-## 💻 El código Python
+Al final, insistiendo y usando el comando correcto, se generó bien el archivo respuesta_rrhh.txt.sig.
 
-Como PGP es complicado en Python, he usado un truco: mi script llama directamente a la herramienta `gpg` del sistema para hacer las operaciones.
+📸 Evidencia: En 3.jpg y el principio de 4.jpg se ven esos intentos hasta que funcionó.
 
-```python
-import os
-import subprocess
-import tempfile
-import shutil
+4. Cifrado del mensaje final (Paso 3)
+Por último, cifré el mensaje de confirmación para que lo leamos solo Pedro y yo.
 
-# --- EJERCICIO 10: PGP ---
-# Como no hay libreria de python para PGP instalada, usamos el comando 'gpg' del sistema.
-# Es lo mas facil y "novato" para automatizar esto sin instalar cosas raras.
+Al ejecutar el comando, la terminal me lanzó unas advertencias en plan "No hay seguridad de que esta clave pertenezca al usuario...".
 
-def run_gpg(args, input_data=None, homedir=None):
-    # Funcion para ejecutar gpg
-    cmd = ["gpg", "--batch", "--yes"]
-    if homedir:
-        cmd.extend(["--homedir", homedir])
-    cmd.extend(args)
-    
-    result = subprocess.run(
-        cmd, 
-        input=input_data if input_data else None,
-        capture_output=True,
-        text=True
-    )
-    return result
+Me asusté un poco, pero leí que tenía que confirmar la confianza, así que escribí "s" (sí) dos veces para aceptar las claves de Pedro y RRHH.
 
-# 1. DATOS (Hardcoded)
+Al final hice un ls para comprobar que el archivo .gpg estaba ahí.
 
-# Claves de Pedro
-pedro_pub = """-----BEGIN PGP PUBLIC KEY BLOCK-----
+📸 Evidencia: Todo el proceso de las preguntas de seguridad está en 4.jpg y el resultado final en 5.jpg.
 
-mDMEYrhG/BYJKwYBBAHaRw8BAQdADXLwl3iCWWDNmKoBmZ+/rKdz+8ulKz4cK7Pj
-PdZu8Fy0NVBlZHJvIFBlZHJpdG8gUGVkcm8gPHBlZHJvLnBlZHJpdG8ucGVkcm9A
-ZW1wcmVzYS5jb20+iJkEExYKAEEWIQQb3mNeTq5uaN+tL3zXML4ZbkZhAQUCYrhG
-/AIbAwUJA8JnAAULCQgHAgIiAgYVCgkICwIEFgIDAQIeBwIXgAAKCRDXML4ZbkZh
-AYAfAP4xudXYKg3d59Doa3eswATu+r1dfqXk6xbPHd7rTD5bbwEAjar0HIi7Xi3M
-0m7LMRGEx5CKcSZYbkCXYwaAyUWm5w+4OARiuEb8EgorBgEEAZdVAQUBAQdANwkF
-l/zIRjpNCCwhe6c4NDaEcdmegYUrsahIf+/6MmsDAQgHiH4EGBYKACYWIQQb3mNe
-Tq5uaN+tL3zXML4ZbkZhAQUCYrhG/AIbDAUJA8JnAAAKCRDXML4ZbkZhAVusAQD3
-PRwejqYh8WLV1sWPlDKkaU+vnfUaRYkpesu7ZSklbAD9EnmAr+dVK2VOW9e3f8h0
-5VxGZQQMnBylOKKilTQM7gw=
-=O3za
------END PGP PUBLIC KEY BLOCK-----"""
+Resumen de archivos entregados:
+En esta carpeta adjunto tanto los resultados como las pruebas:
 
-pedro_priv = """-----BEGIN PGP PRIVATE KEY BLOCK-----
+Archivos del ejercicio:
 
-lIYEYrhG/BYJKwYBBAHaRw8BAQdADXLwl3iCWWDNmKoBmZ+/rKdz+8ulKz4cK7Pj
-PdZu8Fz+BwMCrqURvfXP1kn7E+b6ReWgTiyEZb+/Y3ltTX1JxW4ms+uwWv/ZeyqN
-pyb38GvcqjH65shub28SdT+Rt31dmfiZvyQ9/zceoReLv4wuau3xIbQ1UGVkcm8g
-UGVkcml0byBQZWRybyA8cGVkcm8ucGVkcml0by5wZWRyb0BlbXByZXNhLmNvbT6I
-mQQTFgoAQRYhBBveY15Orm5o360vfNcwvhluRmEBBQJiuEb8AhsDBQkDwmcABQsJ
-CAcCAiICBhUKCQgLAgQWAgMBAh4HAheAAAoJENcwvhluRmEBgB8A/jG51dgqDd3n
-0Ohrd6zABO76vV1+peTrFs8d3utMPltvAQCNqvQciLteLczSbssxEYTHkIpxJlhu
-QJdjBoDJRabnD5yLBGK4RvwSCisGAQQBl1UBBQEBB0A3CQWX/MhGOk0ILCF7pzg0
-NoRx2Z6BhSuxqEh/7/oyawMBCAf+BwMCbCCJhCFLXyn7hpKe4dHwM3UmoQJ2J7Pf
-8DbmdQ6gANww3TTuVyNZns4TJIK1yc8OOUEJM+OiiU1S7Wu2SxB1N8qiolT6IW74
-W/ZERyJpHoh+BBgWCgAmFiEEG95jXk6ubmjfrS981zC+GW5GYQEFAmK4RvwCGwwF
-CQPCZwAACgkQ1zC+GW5GYQFbrAEA9z0cHo6mIfFi1dbFj5QypGlPr531GkWJKXrL
-u2UpJWwA/RJ5gK/nVStlTlvXt3/IdOVcRmUEDJwcpTiiopU0DO4M
-=TwUq
------END PGP PRIVATE KEY BLOCK-----"""
+respuesta_rrhh.txt.sig (Firma generada en el paso 2).
 
-# Claves de RRHH
-rrhh_pub = """-----BEGIN PGP PUBLIC KEY BLOCK-----
+confirmacion.gpg (Archivo cifrado generado en el paso 3).
 
-mDMEYrf4FBYJKwYBBAHaRw8BAQdAzE225Rvjhfdfj9KUhNzZC1irOgGgGeb5Ll1j
-dHNp0jS0EFJSSEggPFJSSEhAUlJISD6ImQQTFgoAQRYhBPKx0OiVjfLTvbahBThp
-gDxoTSh7BQJit/gUAhsDBQkDwmcABQsJCAcCAiICBhUKCQgLAgQWAgMBAh4HAheA
-AAoJEDhpgDxoTSh7bxABALBTqforDq/psjs0slYi4nu49FhC/l7Hgg5MAWycHzfn
-AP0ZjBN/kreafHhyeG+D5EwVJIGvJGEQDr+rbuRQc8CgC7g4BGK3+BQSCisGAQQB
-l1UBBQEBB0DtQMlHTj+mOs7dB+btDBReycmBKDYjpKYRv9HetaE1HgMBCAeIfgQY
-FgoAJhYhBPKx0OiVjfLTvbahBThpgDxoTSh7BQJit/gUAhsMBQkDwmcAAAoJEDhp
-gDxoTSh79sMA/Ag83Kr69fMUFsmadW3FVjBKYY0VsgMIV5ELAelGMl4OAP0VwoMM
-Uctb/HgCdUxK0xkIPyZ6X2sOCoTsGZUnlE5jBQ==
-=i2AB
------END PGP PUBLIC KEY BLOCK-----"""
+Capturas de pantalla del proceso:
 
-rrhh_priv = """-----BEGIN PGP PRIVATE KEY BLOCK-----
+1.png, 2.png, 3.jpg, 4.jpg, 5.jpg.
 
-lIYEYrf4FBYJKwYBBAHaRw8BAQdAzE225Rvjhfdfj9KUhNzZC1irOgGgGeb5Ll1j
-dHNp0jT+BwMCevp8FHb+LPr2E3iSpdOuf+XcZNQKHQHngA7Qd9BJQy5WuUNz636w
-WAgJ9X0nCXgzymGgLD2wDGX7KhTMPsJeasqgvAtvs2OCvBg3PR/3c7QQUlJISCA8
-UlJISEBSUkhIPoiZBBMWCgBBFiEE8rHQ6JWN8tO9tqEFOGmAPGhNKHsFAmK3+BQC
-GwMFCQPCZwAFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgkQOGmAPGhNKHtv
-EAEAsFOp+isOr+myOzSyViLie7j0WEL+XseCDkwBbJwfN+cA/RmME3+St5p8eHJ4
-b4PkTBUkga8kYRAOv6tu5FBzwKALnIsEYrf4FBIKKwYBBAGXVQEFAQEHQO1AyUdO
-P6Y6zt0H5u0MFF7JyYEoNiOkphG/0d61oTUeAwEIB/4HAwKdPLew5SLUHPZtTt41
-PPer4naM2o0VU31Wu/XOYO41x7tbtsgUQmuD9Ovc4Zio9boLGIm0bKRv0eDJyRQw
-KDbaJmTSkM9frKEZNzPjFYJjiH4EGBYKACYWIQTysdDolY3y0722oQU4aYA8aE0o
-ewUCYrf4FAIbDAUJA8JnAAAKCRA4aYA8aE0oe/bDAPwIPNyq+vXzFBbJmnVtxVYw
-SmGNFbIDCFeRCwHpRjJeDgD9FcKDDFHLW/x4AnVMStMZCD8mel9rDgqE7BmVJ5RO
-YwU=
-=+1CU
------END PGP PRIVATE KEY BLOCK-----"""
-
-# Mensaje firmado original
-mensaje_firmado_pedro = """-----BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA512
-
-Se debe ascender inmediatamente a Raúl. Es necesario mejorarle sus condiciones económicas un 20% para que se quede con nosotros.
------BEGIN PGP SIGNATURE-----
-
-iJYEARYKAD4WIQQb3mNeTq5uaN+tL3zXML4ZbkZhAQUCYrhHNSAccGVkcm8ucGVk
-cml0by5wZWRyb0BlbXByZXNhLmNvbQAKCRDXML4ZbkZhAcUcAP9G6wAIZDFlR1Q9
-TCIJuLEHj6LTRTNkATS4smub+/+88gD+JlAZHDMhx3wThhfJq07TBmD+EBJNgv76
-AEBhvVWvKgw=
-=e8AU
------END PGP SIGNATURE-----"""
-
-# Mensajes nuevos
-msg_para_firmar = "Viendo su perfil en el mercado, hemos decidido ascenderle y mejorarle un 25% su salario.\nSaludos."
-msg_para_cifrar = "Estamos todos de acuerdo, el ascenso será el mes que viene, agosto, si no hay sorpresas."
-
-# Crea una carpeta temporal para el anillo de claves (para no ensuciar el pc)
-temp_dir = tempfile.mkdtemp()
-print(f"Usando directorio temporal GPG: {temp_dir}")
-
-try:
-    # 2. IMPORTAR CLAVES
-    print("\n--- Importando claves ---")
-    run_gpg(["--import"], pedro_pub, temp_dir)
-    run_gpg(["--import"], rrhh_priv, temp_dir)
-
-    # PARAMETROS COMUNES
-    # Las claves estan caducadas (son de 2022). Usamos fake-time para que funcionen.
-    # Fecha: 2022-07-01
-    fake_time_arg = "--faked-system-time=20220701T000000"
-
-    # 3. VERIFICAR FIRMA
-    # Guardamos el mensaje firmado en un archivo temp
-    f_sig_path = os.path.join(temp_dir, "mensaje.sig")
-    with open(f_sig_path, "w") as f:
-        f.write(mensaje_firmado_pedro)
-        
-    print("\n--- Verificando firma de Pedro ---")
-    # gpg --verify mensaje.sig
-    res_verify = run_gpg(["--verify", fake_time_arg, f_sig_path], None, temp_dir)
-    print(res_verify.stderr)
-    
-    # 4. FIRMAR MENSAJE (Como RRHH)
-    print("\n--- Firmando mensaje como RRHH ---")
-    res_sign = run_gpg(["--clearsign", fake_time_arg, "--local-user", "RRHH"], msg_para_firmar, temp_dir)
-    print("Mensaje Firmado:")
-    print(res_sign.stdout)
-    
-    # 5. CIFRAR MENSAJE (Para Pedro y RRHH)
-    print("\n--- Cifrando mensaje ---")
-    
-    # Usamos UIDs parciales "Pedro" y "RRHH"
-    res_enc = run_gpg(["--encrypt", fake_time_arg, "--recipient", "Pedro", "--recipient", "RRHH", "--armor", "--trust-model", "always"], msg_para_cifrar, temp_dir)
-    
-    print("Mensaje Cifrado:")
-    print(res_enc.stdout)
-    
-finally:
-    # Borramos carpeta temporal
-    shutil.rmtree(temp_dir)
-    print("\nLimpieza completada.")
+Espero que esté todo bien, ¡un saludo!
