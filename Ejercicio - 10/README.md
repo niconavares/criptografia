@@ -1,56 +1,56 @@
-Hola, aquí entrego los archivos resultantes del Ejercicio 10. Es la primera vez que hago una práctica completa de criptografía en la terminal, así que he ido paso a paso y sacando capturas de todo para documentarlo (incluso de cuando me equivocaba).
+# Ejercicio 10: Práctica GPG - Entregables
 
-Aquí explico lo que he hecho y qué captura corresponde a cada paso:
+Hola, aquí dejo la documentación de la práctica. Es la primera vez que realizo el flujo completo de criptografía con GPG en la terminal, así que he ido documentando cada paso con capturas para asegurarme de no perder el hilo.
 
-1. Preparación de las claves
-Lo primero fue importar las claves públicas y privadas de Pedro y RRHH.
+A continuación detallo los pasos que he seguido y el resultado de cada uno.
 
-He ejecutado los 4 comandos de importación.
+### 1. Preparación de las claves
+Lo primero fue importar todas las claves al anillo (keyring).
+* He importado las claves públicas y privadas tanto de Pedro como de RRHH.
+* La terminal me confirmó "sin cambios" o "leídas" en los 4 casos.
+* Aquí dejo la captura del proceso:
 
-Todo ha salido bien, ponía "sin cambios" o "leídas".
+![Importación de claves](1.png)
 
-📸 Evidencia: Se puede ver en la imagen 1.png.
+---
 
-2. Verificación de la firma (Paso 1)
-Tenía que comprobar que el mensaje de Pedro era auténtico.
+### 2. Verificación de la firma (Paso 1)
+El objetivo era verificar que el mensaje de Pedro fuese auténtico.
+* **Nota:** Al principio me equivoqué y escribí el nombre del archivo terminado en `.txt.sig` (se ve el error en la captura), pero me di cuenta de que el archivo real era solo `.sig`.
+* Al corregirlo, obtuve el mensaje **"Firma correcta"**.
 
-Aquí tuve un pequeño fallo al principio: escribí el nombre del archivo acabado en .txt.sig y me dio error porque no existía.
+![Verificación de firma con el error inicial y el acierto](2.png)
 
-Luego me di cuenta, lo corregí quitando el .txt y ya me salió el mensaje de "Firma correcta" (Good signature).
+---
 
-📸 Evidencia: En la imagen 2.png se ven mis dos intentos y el resultado correcto al final.
+### 3. Firmar la respuesta de RRHH (Paso 2)
+Aquí tuve que generar la respuesta y firmarla digitalmente.
+* Me costó un poco porque la terminal me dio varios errores de "signing failed" u "operación cancelada" (creo que me lie seleccionando el usuario local "RRHH").
+* Se pueden ver mis intentos fallidos en la siguiente imagen, hasta que finalmente di con la tecla.
 
-3. Firmar la respuesta de RRHH (Paso 2)
-Este paso me costó un poco más. Tenía que firmar mi respuesta simulando ser RRHH.
+![Intentos de firma](3.jpg)
 
-Como se ve en las capturas, al principio me salía un error de "signing failed" o "operación cancelada". Me puse un poco nervioso porque no sabía qué clave estaba cogiendo.
+* Finalmente, logré generar el archivo de firma correctamente.
 
-Al final, insistiendo y usando el comando correcto, se generó bien el archivo respuesta_rrhh.txt.sig.
+---
 
-📸 Evidencia: En 3.jpg y el principio de 4.jpg se ven esos intentos hasta que funcionó.
+### 4. Cifrado del mensaje final (Paso 3)
+Por último, cifré el mensaje de confirmación para los dos destinatarios (Pedro y RRHH).
+* Al ejecutar el comando, GPG me lanzó unas advertencias de seguridad ("No hay seguridad de que esta clave pertenezca...").
+* Como se ve en la captura, tuve que escribir "s" (sí) dos veces para confirmar que confiaba en las claves y proceder con el cifrado.
 
-4. Cifrado del mensaje final (Paso 3)
-Por último, cifré el mensaje de confirmación para que lo leamos solo Pedro y yo.
+![Confirmación de seguridad y cifrado](4.jpg)
 
-Al ejecutar el comando, la terminal me lanzó unas advertencias en plan "No hay seguridad de que esta clave pertenezca al usuario...".
+* Al final, hice un `ls` para comprobar que todos los archivos requeridos (`confirmacion.gpg`, `respuesta_rrhh.txt.sig`) se habían creado bien en la carpeta.
 
-Me asusté un poco, pero leí que tenía que confirmar la confianza, así que escribí "s" (sí) dos veces para aceptar las claves de Pedro y RRHH.
+![Resultado final con ls](5.jpg)
 
-Al final hice un ls para comprobar que el archivo .gpg estaba ahí.
+---
 
-📸 Evidencia: Todo el proceso de las preguntas de seguridad está en 4.jpg y el resultado final en 5.jpg.
+### Resumen de la entrega
+En esta carpeta entrego:
+1.  **`respuesta_rrhh.txt.sig`**: La firma digital generada.
+2.  **`confirmacion.gpg`**: El archivo cifrado final.
+3.  Este documento con las capturas de evidencia del proceso.
 
-Resumen de archivos entregados:
-En esta carpeta adjunto tanto los resultados como las pruebas:
-
-Archivos del ejercicio:
-
-respuesta_rrhh.txt.sig (Firma generada en el paso 2).
-
-confirmacion.gpg (Archivo cifrado generado en el paso 3).
-
-Capturas de pantalla del proceso:
-
-1.png, 2.png, 3.jpg, 4.jpg, 5.jpg.
-
-Espero que esté todo bien, ¡un saludo!
+Un saludo.
