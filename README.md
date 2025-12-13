@@ -16,21 +16,21 @@ Aquí están los 15 retos resueltos. He intentado explicar cada uno de forma sen
 
 | Carpeta | Temática | Lo que he aprendido / Qué he hecho |
 | :--- | :--- | :--- |
-| **[📂 Ejercicio 01](./Ejercicio%20-%201)** | **Disociación de Claves** | Cómo proteger claves usando XOR entre una parte fija en código y otra variable. |
-| **[📂 Ejercicio 02](./ejercicio2)** | **Descifrado AES-CBC** | Descifrar mensajes, manejo de IVs y entender por qué el padding PKCS7 es vital. |
-| **[📂 Ejercicio 03](./ejercicio3)** | **ChaCha20 + Poly1305** | Cifrado de flujo moderno y cómo garantizar la integridad del mensaje (AEAD). |
-| **[📂 Ejercicio 04](./ejercicio4)** | **Seguridad en JWT** | Análisis de tokens, firmas HMAC y cómo evitar escaladas de privilegios. |
-| **[📂 Ejercicio 05](./ejercicio5)** | **Hashing & Avalancha** | Diferencias entre SHA-2 y SHA-3 y demostración práctica del "Efecto Avalancha". |
-| **[📂 Ejercicio 06](./ejercicio6)** | **Cálculo HMAC** | Verificar la autenticidad de una frase usando una clave secreta extraída de un Keystore. |
-| **[📂 Ejercicio 07](./ejercicio7)** | **Passwords** | Análisis teórico: por qué no usar SHA-1 y cómo Argon2 protege mejor las contraseñas. |
-| **[📂 Ejercicio 08](./ejercicio8)** | **Seguridad API REST** | Diseño teórico de un JSON seguro usando AES-GCM para proteger datos bancarios. |
-| **[📂 Ejercicio 09](./ejercicio9)** | **KCV (Check Value)** | Calcular la "huella" de una clave AES usando tanto SHA-256 como cifrado de ceros. |
-| **[📂 Ejercicio 10](./ejercicio10)** | **PGP & GPG** | Firmado y cifrado de correos/archivos en un escenario corporativo (RRHH vs Pedro). |
-| **[📂 Ejercicio 11](./ejercicio11)** | **RSA-OAEP** | Descifrar una clave de sesión con RSA y entender por qué el cifrado cambia cada vez. |
-| **[📂 Ejercicio 12](./ejercicio12)** | **AES-GCM & Nonces** | El peligro de reutilizar el "Nonce" y cómo cifrar correctamente un mensaje. |
-| **[📂 Ejercicio 13](./ejercicio13)** | **Firmas Digitales** | Comparativa visual entre firmas clásicas (RSA) y Curvas Elípticas (Ed25519). |
-| **[📂 Ejercicio 14](./ejercicio14)** | **Derivación (HKDF)** | Cómo generar claves únicas por dispositivo usando una clave maestra y un Salt. |
-| **[📂 Ejercicio 15](./ejercicio15)** | **Bloques TR-31** | Análisis y decodificación de bloques de claves usados en entornos bancarios. |
+| **[📂 Ejercicio 01](./Ejercicio%20-%2001)** | **Disociación de Claves** | Cómo proteger claves usando XOR entre una parte fija en código y otra variable. |
+| **[📂 Ejercicio 02](./Ejercicio%20-%2002)** | **Descifrado AES-CBC** | Descifrar mensajes, manejo de IVs y entender por qué el padding PKCS7 es vital. |
+| **[📂 Ejercicio 03](./Ejercicio%20-%2003)** | **ChaCha20 + Poly1305** | Cifrado de flujo moderno y cómo garantizar la integridad del mensaje (AEAD). |
+| **[📂 Ejercicio 04](./Ejercicio%20-%2004)** | **Seguridad en JWT** | Análisis de tokens, firmas HMAC y cómo evitar escaladas de privilegios. |
+| **[📂 Ejercicio 05](./Ejercicio%20-%2005)** | **Hashing & Avalancha** | Diferencias entre SHA-2 y SHA-3 y demostración práctica del "Efecto Avalancha". |
+| **[📂 Ejercicio 06](./Ejercicio%20-%2006)** | **Cálculo HMAC** | Verificar la autenticidad de una frase usando una clave secreta extraída de un Keystore. |
+| **[📂 Ejercicio 07](./Ejercicio%20-%2007)** | **Passwords** | Análisis teórico: por qué no usar SHA-1 y cómo Argon2 protege mejor las contraseñas. |
+| **[📂 Ejercicio 08](./Ejercicio%20-%2008)** | **Seguridad API REST** | Diseño teórico de un JSON seguro usando AES-GCM para proteger datos bancarios. |
+| **[📂 Ejercicio 09](./Ejercicio%20-%2009)** | **KCV (Check Value)** | Calcular la "huella" de una clave AES usando tanto SHA-256 como cifrado de ceros. |
+| **[📂 Ejercicio 10](./Ejercicio%20-%2010)** | **PGP & GPG** | Firmado y cifrado de correos/archivos en un escenario corporativo (RRHH vs Pedro). |
+| **[📂 Ejercicio 11](./Ejercicio%20-%2011)** | **RSA-OAEP** | Descifrar una clave de sesión con RSA y entender por qué el cifrado cambia cada vez. |
+| **[📂 Ejercicio 12](./Ejercicio%20-%2012)** | **AES-GCM & Nonces** | El peligro de reutilizar el "Nonce" y cómo cifrar correctamente un mensaje. |
+| **[📂 Ejercicio 13](./Ejercicio%20-%2013)** | **Firmas Digitales** | Comparativa visual entre firmas clásicas (RSA) y Curvas Elípticas (Ed25519). |
+| **[📂 Ejercicio 14](./Ejercicio%20-%2014)** | **Derivación (HKDF)** | Cómo generar claves únicas por dispositivo usando una clave maestra y un Salt. |
+| **[📂 Ejercicio 15](./Ejercicio%20-%2015)** | **Bloques TR-31** | Análisis y decodificación de bloques de claves usados en entornos bancarios. |
 
 ---
 
